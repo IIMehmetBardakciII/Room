@@ -2,32 +2,54 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+
+:root{
+    /** PrimaryColors */
+    --almostBlack:33, 33, 33, 1;
+    --textGray:128, 128, 128, 1;
+    --paragraphGray:181, 181, 181, 1;
+    --bgGray:237, 237, 237, 1;
+    --white:255, 255, 255, 1;
+    /** SecondaryColors */
+    --hoverBlue:0, 109, 204, 1;
+    --defaultBlue:0, 136, 255, 1;
+    --disabledBlue:77, 172, 255, 1;
+    --hoverGreen:38, 204, 0, 1;
+    --defaultGreen:47, 255, 0, 1;
+    --disabledGreen:109, 255, 77, 1;
+    --hoverRed:204, 0, 0, 1;
+    --defaultRed:255, 0, 0, 1;
+    --disabledRed:255, 77, 77, 1;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+
+@layer base{
+    h1{
+        @apply text-[48px] font-medium
+    }
+    h2{
+        @apply text-[40px] font-medium
+    }
+    h3{
+        @apply text-[32px] font-normal
+    }
+    h4{
+        @apply text-[20px] font-normal
+    }
+    h5{
+        @apply text-[12px] font-medium leading-[14px] tracking-[8%]
+    }
+    p{
+        @apply text-[16px] font-normal leading-5
+    }
+    /** span=small */ 
+    span{
+        @apply text-[12px] font-normal
+    }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-}
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+@layer utilities{
+    .full{
+        @apply w-screen !important
+    }
 }

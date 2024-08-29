@@ -7,13 +7,27 @@ const config: Config = {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    extend: {
-      backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
-      },
+    colors: {
+      // PrimaryColors
+      almostBlack: "rgba(var(--almostBlack))",
+      textGray: "rgba(var(--textGray))",
+      paragraphGray: "var(rgba(--paragraphGray))",
+      bgGray: "rgba(var(--bgGray))",
+      white: "rgba(var(--white))",
+      // Secondary Colors
+      hoverBlue: "rgba(var(--hoverBlue))",
+      defaultBlue: "rgba(var(--defaultBlue))",
+      disabledBlue: "rgba(var(--disabledBlue))",
+
+      hoverRed: "rgba(var(--hoverRed))",
+      defaultRed: "rgba(var(--defaultRed))",
+      disabledRed: "rgba(var(--disabledRed))",
+
+      hoverGreen: "rgba(var(--hoverGreen))",
+      defaultGreen: "rgba(var(--defaultGreen))",
+      disabledGreen: "rgba(var(--disabledGreen))",
     },
+    extend: {},
   },
   plugins: [],
 };
