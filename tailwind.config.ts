@@ -11,7 +11,9 @@ const config: Config = {
       // PrimaryColors
       almostBlack: "rgba(var(--almostBlack))",
       textGray: "rgba(var(--textGray))",
-      paragraphGray: "var(rgba(--paragraphGray))",
+      paragraphGray: "rgba(var(--paragraphGray))",
+      sidebarNavHover: "rgba(var(--sidebarNavHover))",
+      inputTextColor: "rgba(var(--inputTextColor))",
       bgGray: "rgba(var(--bgGray))",
       white: "rgba(var(--white))",
       // Secondary Colors
@@ -27,7 +29,11 @@ const config: Config = {
       defaultGreen: "rgba(var(--defaultGreen))",
       disabledGreen: "rgba(var(--disabledGreen))",
     },
-    extend: {},
+    extend: {
+      transitionProperty: {
+        transform: "transform",
+      },
+    },
   },
   plugins: [],
 };

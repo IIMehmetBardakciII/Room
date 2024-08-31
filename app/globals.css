@@ -3,53 +3,81 @@
 @tailwind utilities;
 
 
-:root{
+:root {
     /** PrimaryColors */
-    --almostBlack:33, 33, 33, 1;
-    --textGray:128, 128, 128, 1;
-    --paragraphGray:181, 181, 181, 1;
-    --bgGray:237, 237, 237, 1;
-    --white:255, 255, 255, 1;
+    --almostBlack: 33, 33, 33, 1;
+    --textGray: 128, 128, 128, 1;
+    --paragraphGray: 181, 181, 181, 1;
+    --bgGray: 237, 237, 237, 1;
+    --sidebarNavHover: 56, 56, 56, 1;
+    --inputTextColor: 112, 112, 112, 1;
+    --white: 255, 255, 255, 1;
     /** SecondaryColors */
-    --hoverBlue:0, 109, 204, 1;
-    --defaultBlue:0, 136, 255, 1;
-    --disabledBlue:77, 172, 255, 1;
-    --hoverGreen:38, 204, 0, 1;
-    --defaultGreen:47, 255, 0, 1;
-    --disabledGreen:109, 255, 77, 1;
-    --hoverRed:204, 0, 0, 1;
-    --defaultRed:255, 0, 0, 1;
-    --disabledRed:255, 77, 77, 1;
+    --hoverBlue: 0, 109, 204, 1;
+    --defaultBlue: 0, 136, 255, 1;
+    --disabledBlue: 77, 172, 255, 1;
+    --hoverGreen: 38, 204, 0, 1;
+    --defaultGreen: 47, 255, 0, 1;
+    --disabledGreen: 109, 255, 77, 1;
+    --hoverRed: 204, 0, 0, 1;
+    --defaultRed: 255, 0, 0, 1;
+    --disabledRed: 255, 77, 77, 1;
 }
 
 
-@layer base{
-    h1{
+
+@layer base {
+    body {
+        /*? Bu ayarlar, fontların daha pürüzsüz görünmesini sağlar. antialiased ve grayscale ayarları, metinlerin kenarlarını yumuşatır ve daha okunaklı hale getirir. */
+        /*! Font Yumuşatma (Font Smoothing) */
+        /** WebKit Tarayıcılar (Chrome, Safari, Opera): */
+        -webkit-font-smoothing: antialiased;
+        /** Mozila Tarayıcılar (Firefox): */
+        -moz-osx-font-smoothing: grayscale;
+
+        /*!Yazı Kalınlığı (Text Rendering):  */
+        /** optimizeLegibility ayarı, metinlerin okunabilirliğini artırmak için bazı ek iyileştirmeler yapar. */
+        text-rendering: optimizeLegibility;
+        /** font-display: swap ayarı, fontun hızlıca yüklenmesini ve metinlerin kaybolmadan görünmesini sağlar. */
+        font-display: swap;
+
+        /*! Scrool smooth işlemi */
+        scroll-behavior: smooth;
+
+    }
+
+    h1 {
         @apply text-[48px] font-medium
     }
-    h2{
+
+    h2 {
         @apply text-[40px] font-medium
     }
-    h3{
+
+    h3 {
         @apply text-[32px] font-normal
     }
-    h4{
+
+    h4 {
         @apply text-[20px] font-normal
     }
-    h5{
+
+    h5 {
         @apply text-[12px] font-medium leading-[14px] tracking-[8%]
     }
-    p{
+
+    p {
         @apply text-[16px] font-normal leading-5
     }
-    /** span=small */ 
-    span{
+
+    /** span=small */
+    span {
         @apply text-[12px] font-normal
     }
 }
 
-@layer utilities{
-    .full{
+@layer utilities {
+    .full {
         @apply w-screen !important
     }
 }
