@@ -23,9 +23,9 @@ jobs:
 
       - name: Run Build
         run: npm run build
-
-      - name: Run tests
-        run: npm test
+        # Test frameworku eklendiğinde çalıştırılacak
+      # - name: Run tests
+      #   run: npm test
 
       - name: Vercel Deploy process
         env:

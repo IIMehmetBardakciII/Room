@@ -15,7 +15,7 @@ type Props = {
 };
 
 export function SidebarProvider({ children }: Props) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const toggleSidebar = () => {
     setIsOpen((prev) => !prev);
   };
