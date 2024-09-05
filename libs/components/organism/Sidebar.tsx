@@ -8,7 +8,6 @@ import { usePathname, useRouter } from "next/navigation";
 const SideBar = () => {
   const { isOpen } = useSidebar();
   const pathname = usePathname();
-  console.log(pathname);
   return (
     <aside
       className={cn(

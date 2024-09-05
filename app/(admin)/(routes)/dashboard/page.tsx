@@ -1,6 +1,8 @@
 "use client";
 import AddChapter from "@/libs/components/organism/AddChapter";
 import CategoryDropDown from "@/libs/components/organism/CategoryDropDown";
+import Deneme from "@/libs/components/utils/Deneme";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { BiCheckboxChecked } from "react-icons/bi";
 
@@ -14,7 +16,9 @@ const Dashboard = () => {
     category: "",
   });
   const [chapters, setChapters] = useState<Chapter[]>([]);
-
+  const [error, setError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const router = useRouter();
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -40,9 +44,12 @@ const Dashboard = () => {
 
     const data = await response.json();
     if (response.ok) {
-      console.log("Video başarıyla yüklendi:", data);
+      setSuccessMessage("Video başarıyla yüklendi!");
+      setError(null);
+      router.push("/e-learning");
     } else {
-      console.error("Video yüklenemedi:", data.error);
+      setError(data.error);
+      setSuccessMessage(null);
     }
   }
 
@@ -177,7 +184,12 @@ const Dashboard = () => {
         <div className="flex flex-1">
           <AddChapter chapters={chapters} setChapters={setChapters} />
         </div>
+        <Deneme />
       </form>
+      <div className="w-fit h-full mt-4">
+        {error && <div className="text-white">{error}</div>}
+        {successMessage && <div className="text-white">{successMessage}</div>}
+      </div>
     </div>
   );
 };

@@ -1,17 +1,39 @@
 import Image from "next/image";
 
-const VideosCard = () => {
+type VideosCardProps = {
+  title: string;
+  coverImageUrl: string;
+  description: string;
+  singlePage?: string;
+  videoId: string;
+};
+const VideosCard = ({
+  coverImageUrl,
+  description,
+  title,
+  singlePage,
+  videoId,
+}: VideosCardProps) => {
   return (
-    <div className="w-full">
-      {/* Videos Cover Image */}
-      <div className="h-[190px] w-full relative">
-        <Image src="" alt="" fill className="object-cover" />
+    <a href={`/e-learning/${videoId}`}>
+      <div className="w-full">
+        {/* Videos Cover Image */}
+        <div className="h-[190px] w-full relative">
+          <Image
+            src={coverImageUrl}
+            alt={title}
+            fill
+            className="object-cover"
+          />
+        </div>
+        {/* Videos Title */}
+        <div>{title}</div>
+        {/* Videos descpription */}
+        <div>{description}</div>
+        {/* Videos rating & comments */}
+        {/* Videos Maker */}
       </div>
-      {/* Videos Title */}
-      {/* Videos descpription */}
-      {/* Videos rating & comments */}
-      {/* Videos Maker */}
-    </div>
+    </a>
   );
 };
 
