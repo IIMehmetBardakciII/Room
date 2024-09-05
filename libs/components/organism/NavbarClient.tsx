@@ -1,6 +1,6 @@
 "use client";
 
-import { useSidebar } from "@/context/SidebarProvider";
+import { useSidebar } from "@/libs/context/SidebarProvider";
 import { MdDehaze } from "react-icons/md";
 
 const NavbarClient = () => {

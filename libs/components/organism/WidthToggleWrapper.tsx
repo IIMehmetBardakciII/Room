@@ -1,6 +1,6 @@
 "use client";
-import { useSidebar } from "@/context/SidebarProvider";
-import { cn } from "@/utils/cn";
+import { useSidebar } from "@/libs/context/SidebarProvider";
+import { cn } from "@/libs/utils/cn";
 
 const WidthToggleWrapper = ({ children }: { children: React.ReactNode }) => {
   const { isOpen } = useSidebar();

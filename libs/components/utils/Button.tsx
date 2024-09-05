@@ -1,10 +1,12 @@
-import { cn } from "@/utils/cn";
+import { cn } from "@/libs/utils/cn";
 
 type ButtonProps = {
   buttonColor: "blue" | "green";
   text: string;
   buttonType: "default" | "ghost";
   className?: string;
+  disabled?: boolean;
+  type?: "button" | "submit" | "reset";
 };
 
 const buttonStyles = {
@@ -18,16 +20,25 @@ const buttonStyles = {
       "bg-transparent border text-defaultGreen border-defaultGreen hover:bg-hoverGreen hover:text-white",
   },
 };
-
-const Button = ({ buttonColor, buttonType, text, className }: ButtonProps) => {
+const disabledStyles = "opacity-50 cursor-not-allowed";
+const Button = ({
+  buttonColor,
+  buttonType,
+  text,
+  className,
+  disabled = false,
+  type,
+}: ButtonProps) => {
   const buttonClass = buttonStyles[buttonType][buttonColor];
 
   return (
     <button
+      type={type}
       className={cn(
         `px-4 py-[10px] max-sm:px-1 max-sm:py-[2px] rounded-[5px]`,
         buttonClass,
-        className
+        className,
+        disabled ? disabledStyles : ""
       )}
     >
       <p className="max-sm:text-[12px]">{text}</p>

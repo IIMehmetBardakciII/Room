@@ -141,3 +141,22 @@ export const sidebarNavItems = {
     },
   ],
 };
+
+export const categories = [
+  {
+    id: "1",
+    name: "Yazılım",
+  },
+  {
+    id: "2",
+    name: "Çizim",
+  },
+  {
+    id: "3",
+    name: "Müzik",
+  },
+  {
+    id: "4",
+    name: "Dil",
+  },
+];

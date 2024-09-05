@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
-import { cn } from "@/utils/cn"; // veya başka bir yol
-import { useSidebar } from "@/context/SidebarProvider";
+import { cn } from "@/libs/utils/cn"; // veya başka bir yol
+import { useSidebar } from "@/libs/context/SidebarProvider";
 
 type SideBarItemsProps = {
   active: boolean;
