@@ -5,6 +5,7 @@ import { collection, addDoc, Timestamp } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
+import { revalidatePath } from "next/cache";
 
 //* Video Max Size , Image Max Size , Chapter Max size
 const MAX_VIDEO_SIZE_MB = 50;
@@ -13,10 +14,7 @@ const MAX_IMAGE_SIZE_MB = 5;
 //! VIDEO SCHEMA BY ZOD
 const videoSchema = z.object({
   videoTitle: z.string().min(1, "Title en az 10 karakter olmalı ve boş olamaz"),
-  videoDescription: z
-    .string()
-    .min(1, "Description minimum 30 karakter olmalı")
-    .max(300, "Description 300 karakteri aşmamalı"),
+  videoDescription: z.string().min(1, "Description minimum 30 karakter olmalı"),
   videoType: z.enum(["Free", "Premium"], {
     invalid_type_error: "Geçersiz Video Tipi",
     required_error: "Video Tipi Seçiniz",
@@ -120,7 +118,7 @@ export async function POST(request: Request) {
       chapters: chapterData,
       rate: 0,
     });
-
+    revalidatePath("/e-learning");
     return NextResponse.json({ message: "Video başarıyla yüklendi!" });
   } catch (error: any) {
     console.error("Video yüklenemedi:", error);

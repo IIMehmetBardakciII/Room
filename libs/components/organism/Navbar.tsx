@@ -7,7 +7,7 @@ const Navbar = () => {
   // For the sidebar state Context Hook
 
   return (
-    <header className="w-[calc(100%-32px)] fixed   ">
+    <header className="w-[calc(100%-32px)] fixed z-50  ">
       {/* Top Small Navigation items  */}
       <div className="w-full flex items-center justify-end text-textGray gap-3 py-2 h-fit max-sm:full   ">
         <span className="hover:underline ">

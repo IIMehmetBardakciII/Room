@@ -1,7 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ["firebasestorage.googleapis.com"],
+    // remotePatterns kullanımı
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "firebasestorage.googleapis.com",
+        pathname: "/**", // Tüm yolları kapsayacak şekilde ayarlandı
+      },
+    ],
   },
   compiler: { styledComponents: true },
   webpack(config, options) {

@@ -1,7 +1,6 @@
 "use client";
 import AddChapter from "@/libs/components/organism/AddChapter";
 import CategoryDropDown from "@/libs/components/organism/CategoryDropDown";
-import Deneme from "@/libs/components/utils/Deneme";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { BiCheckboxChecked } from "react-icons/bi";
@@ -184,7 +183,6 @@ const Dashboard = () => {
         <div className="flex flex-1">
           <AddChapter chapters={chapters} setChapters={setChapters} />
         </div>
-        <Deneme />
       </form>
       <div className="w-fit h-full mt-4">
         {error && <div className="text-white">{error}</div>}

@@ -37,7 +37,9 @@ const SideBarItems = ({
           <div
             className={cn(
               "w-[24px] h-[24px]",
-              active ? "text-white" : "fill-none stroke-white",
+              active
+                ? "text-white"
+                : "fill-almostBlack stroke-white stroke-[0.5]",
               !isOpen && "w-[20 px] h-[20px] "
             )}
           >
