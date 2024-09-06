@@ -1,16 +1,13 @@
-"use client";
-import { MdDehaze } from "react-icons/md";
 import { IoMdSearch } from "react-icons/io";
 import Button from "../utils/Button";
 import Image from "next/image";
-import { useSidebar } from "@/context/SidebarProvider";
+import NavbarClient from "./NavbarClient";
 
 const Navbar = () => {
   // For the sidebar state Context Hook
-  const { toggleSidebar } = useSidebar();
 
   return (
-    <header className="w-[calc(100%-32px)] fixed   ">
+    <header className="w-[calc(100%-32px)] fixed z-50  ">
       {/* Top Small Navigation items  */}
       <div className="w-full flex items-center justify-end text-textGray gap-3 py-2 h-fit max-sm:full   ">
         <span className="hover:underline ">
@@ -36,11 +33,7 @@ const Navbar = () => {
       <div className="w-full flex items-center justify-between">
         {/* Logo & Dehaze(Burger Menu) */}
         <div className="flex gap-4 items-center">
-          <MdDehaze
-            className="text-white cursor-pointer hover:bg-sidebarNavHover hover:rounded-md transition ease-in duration-100"
-            size={24}
-            onClick={toggleSidebar}
-          />
+          <NavbarClient />
           <a href="#">
             <h2 className="text-white max-md:text-[16px] max-sm:hidden">
               Room

@@ -1,11 +1,13 @@
 "use client";
 import SideBarItems from "../utils/SidebarItems";
-import { sidebarNavItems } from "@/content/staticData";
-import { useSidebar } from "@/context/SidebarProvider";
-import { cn } from "@/utils/cn";
+import { sidebarNavItems } from "@/libs/content/staticData";
+import { useSidebar } from "@/libs/context/SidebarProvider";
+import { cn } from "@/libs/utils/cn";
+import { usePathname, useRouter } from "next/navigation";
 
 const SideBar = () => {
   const { isOpen } = useSidebar();
+  const pathname = usePathname();
   return (
     <aside
       className={cn(
@@ -15,15 +17,30 @@ const SideBar = () => {
     >
       {/* For Navigation on sidebar */}
       {/* Main Nav */}
-      {sidebarNavItems.mainNav.map((item) => (
-        <SideBarItems
-          key={item.text}
-          active={item.active}
-          text={item.text}
-          icon={<item.icon />}
-          link={item.link}
-        />
-      ))}
+      {sidebarNavItems.mainNav.map((item) => {
+        if (item.link === "/") {
+          return (
+            <SideBarItems
+              key={item.text}
+              active={pathname === item.link}
+              text={item.text}
+              icon={<item.icon />}
+              link={item.link}
+            />
+          );
+        }
+        return (
+          <SideBarItems
+            key={item.text}
+            active={
+              pathname === item.link || pathname.startsWith(`${item.link}`)
+            }
+            text={item.text}
+            icon={<item.icon />}
+            link={item.link}
+          />
+        );
+      })}
       {isOpen && (
         <>
           <span className="h-[1px] ml-4 w-[204px]  border border-textGray rounded-[5px]" />
@@ -34,7 +51,10 @@ const SideBar = () => {
               return (
                 <SideBarItems
                   key={item.text}
-                  active={item.active}
+                  active={
+                    pathname === item.link ||
+                    pathname.startsWith(`${item.link}`)
+                  }
                   text={item.text}
                   icon={<item.icon />}
                   link={item.link}
@@ -45,7 +65,9 @@ const SideBar = () => {
             return (
               <SideBarItems
                 key={item.text}
-                active={item.active}
+                active={
+                  pathname === item.link || pathname.startsWith(`${item.link}`)
+                }
                 text={item.text}
                 icon={<item.icon />}
                 link={item.link}
@@ -58,19 +80,22 @@ const SideBar = () => {
           {sidebarNavItems.Discover.map((item) => (
             <SideBarItems
               key={item.text}
-              active={item.active}
+              active={
+                pathname === item.link || pathname.startsWith(`${item.link}`)
+              }
               text={item.text}
               icon={<item.icon />}
               link={item.link}
             />
           ))}
           <span className="h-[1px] ml-4 w-[204px]  border border-textGray rounded-[5px]" />
-          {sidebarNavItems.Footer.length}
           {/* Footer */}
           {sidebarNavItems.Footer.map((item) => (
             <SideBarItems
               key={item.text}
-              active={item.active}
+              active={
+                pathname === item.link || pathname.startsWith(`${item.link}`)
+              }
               text={item.text}
               icon={<item.icon />}
               link={item.link}

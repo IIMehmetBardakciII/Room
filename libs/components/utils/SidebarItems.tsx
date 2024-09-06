@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
-import { cn } from "@/utils/cn"; // veya başka bir yol
-import { useSidebar } from "@/context/SidebarProvider";
+import { cn } from "@/libs/utils/cn"; // veya başka bir yol
+import { useSidebar } from "@/libs/context/SidebarProvider";
 
 type SideBarItemsProps = {
   active: boolean;
@@ -37,7 +37,9 @@ const SideBarItems = ({
           <div
             className={cn(
               "w-[24px] h-[24px]",
-              active ? "text-white" : "fill-none stroke-white",
+              active
+                ? "text-white"
+                : "fill-almostBlack stroke-white stroke-[0.5]",
               !isOpen && "w-[20 px] h-[20px] "
             )}
           >
