@@ -1,15 +1,20 @@
-import { getSingleVideo } from "@/libs/actions/Videos";
-import { useState } from "react";
-import { IoMdStar } from "react-icons/io";
+import { getCommentsNumbers, getSingleVideo } from "@/libs/actions/Videos";
+import CommentsNumber from "@/libs/components/organism/CommentsNumber";
+import SingleVideoPageClient from "@/libs/components/organism/SingleVideoPageClient";
+
 const SingleVideoPage = async ({ params }: { params: { videoId: string } }) => {
-  // For update to rate .
-  const VideoData = await getSingleVideo(params.videoId);
-  console.log(typeof VideoData?.rate);
-  let rate = VideoData?.rate;
-  if (rate != null) {
-    rate += 1;
-  }
-  return <div>{rate}</div>;
+  const [videoData, commentsNumber] = await Promise.all([
+    getSingleVideo(params.videoId),
+    getCommentsNumbers(params.videoId),
+  ]);
+
+  return (
+    //* ServerSide-ClientSide ilişkisini sağlayabilmek açısından server componentte verileri async çekip client componente yollama işlemi.
+    <SingleVideoPageClient
+      videoData={videoData}
+      commentsNumber={<CommentsNumber commentsNumber={commentsNumber} />}
+    />
+  );
 };
 
 export default SingleVideoPage;
