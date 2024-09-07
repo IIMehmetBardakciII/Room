@@ -1,8 +1,9 @@
-import { getCommentsNumbers } from "@/libs/actions/Videos";
 import { cn } from "@/libs/utils/cn";
 import Image from "next/image";
 import { IoMdStar } from "react-icons/io";
 import CommentsNumber from "./CommentsNumber";
+import { getCategoryName, getCommentsNumbers } from "@/libs/actions/Videos";
+import StaticVideoRate from "../utils/StaticVideoRate";
 
 type VideosCardProps = {
   title: string;
@@ -11,6 +12,7 @@ type VideosCardProps = {
   videoId: string;
   videoType: string;
   videoRate: number;
+  categoryId: string;
 };
 const VideosCard = async ({
   coverImageUrl,
@@ -19,7 +21,15 @@ const VideosCard = async ({
   videoType,
   videoId,
   videoRate,
+  categoryId,
 }: VideosCardProps) => {
+  // const [rating, setRating] = useState();
+
+  const [categoryName, commentsNumber] = await Promise.all([
+    getCategoryName(categoryId),
+    getCommentsNumbers(videoId),
+  ]);
+
   return (
     <a href={`/e-learning/${videoId}`}>
       <div className="w-full flex flex-col gap-1 ">
@@ -35,14 +45,23 @@ const VideosCard = async ({
         {/* Videos Title */}
         <div className="flex gap-3 items-center justify-between ">
           <p className="text-white tracking-[-0.01em]">{title}</p>
-          <p
-            className={cn(
-              "text-white px-[10px] py-[4px]   rounded-[5px]",
-              videoType === "Free" ? "bg-defaultBlue" : "bg-defaultGreen"
-            )}
-          >
-            {videoType}
-          </p>
+          <div className="flex gap-2">
+            <p
+              className={cn(
+                "text-white px-[10px] py-[4px]  bg-sidebarNavHover rounded-[5px]"
+              )}
+            >
+              {categoryName}
+            </p>
+            <p
+              className={cn(
+                "text-white px-[10px] py-[4px]   rounded-[5px]",
+                videoType === "Free" ? "bg-defaultBlue" : "bg-defaultGreen"
+              )}
+            >
+              {videoType}
+            </p>
+          </div>
         </div>
         {/* Videos descpription */}
         <span className="tracking-[-0.01em] text-paragraphGray mt-1">
@@ -50,18 +69,8 @@ const VideosCard = async ({
         </span>
         {/* Videos rating & comments */}
         <div className="flex items-center gap-2 ">
-          {[...Array(5)].map((_star, index) => (
-            <div key={index}>
-              <IoMdStar
-                size={24}
-                className={cn(index + 1 <= videoRate && "text-defaultBlue")}
-              />
-            </div>
-          ))}
-          <span className="font-thin text-paragraphGray tracking-[-0.01em]">
-            (3/5)
-          </span>
-          <CommentsNumber videoId={videoId} />
+          <StaticVideoRate videoRate={videoRate} />
+          <CommentsNumber commentsNumber={commentsNumber} />
         </div>
       </div>
     </a>

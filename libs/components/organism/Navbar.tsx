@@ -34,7 +34,7 @@ const Navbar = () => {
         {/* Logo & Dehaze(Burger Menu) */}
         <div className="flex gap-4 items-center">
           <NavbarClient />
-          <a href="#">
+          <a href="/">
             <h2 className="text-white max-md:text-[16px] max-sm:hidden">
               Room
             </h2>

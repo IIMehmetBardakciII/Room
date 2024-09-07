@@ -108,9 +108,38 @@ export async function getSingleVideo(
   };
 }
 
-export async function getCommentsNumbers(videoId: string) {
+export async function getCommentsNumbers(videoId: string | undefined) {
   const commentRef = collection(db, "Comments");
   const commentsQuery = query(commentRef, where("videoId", "==", videoId));
   const querySnapShot = await getDocs(commentsQuery);
   return querySnapShot.size;
+}
+
+export async function getCategoryName(categoryId: string) {
+  try {
+    // Koleksiyon referansını alma
+    const categoryRef = collection(db, "Category");
+
+    // Belirli bir dökümanın ID'sine göre sorgu oluşturma
+    const categoryQuery = query(
+      categoryRef,
+      where("__name__", "==", categoryId)
+    );
+
+    // Eşleşen dökümanları alma
+    const querySnapshot = await getDocs(categoryQuery);
+
+    // Eğer döküman varsa, ilk dönen dökümanın verilerini al ve döndür.
+    if (!querySnapshot.empty) {
+      const doc = querySnapshot.docs[0]; // İlk dökümanı alın
+      const categoryData = doc.data(); // Dökümanın verilerini alın
+      return categoryData.name; //* Categori name gönder
+    } else {
+      console.log("Döküman bulunamadı");
+      return null; // Döküman bulunamazsa null döndürün
+    }
+  } catch (error) {
+    console.error("Sorgu sırasında hata oluştu:", error);
+    throw error;
+  }
 }
