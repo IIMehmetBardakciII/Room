@@ -57,7 +57,12 @@ const Navbar = () => {
         <div className="flex gap-5">
           <nav className="flex gap-4 max-lg:hidden">
             {/* Kayıt Ol Button */}
-            <Button text="Kayıt Ol" buttonColor="blue" buttonType="default" />
+            <Button
+              text="Kayıt Ol"
+              buttonColor="blue"
+              buttonType="default"
+              href="/sign-up"
+            />
             {/* Giriş Yap Button */}
             <Button text="Giriş Yap" buttonColor="blue" buttonType="ghost" />
 

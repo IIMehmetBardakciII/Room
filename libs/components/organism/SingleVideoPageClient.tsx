@@ -25,6 +25,7 @@ const SingleVideoPageClient = ({
   videoData,
   commentsNumber,
 }: SingleVideoPageClientComponentProps) => {
+  const [loadingStatus, setLoadingStatus] = useState(true);
   const [videoState, setVideoState] = useState<string | null>("");
   const [stateChapterNumber, setStateChapterNumber] = useState<number>(0);
   const [descriptionState, setDescriptionState] = useState(false);
@@ -36,14 +37,16 @@ const SingleVideoPageClient = ({
       }
     });
   }
-  console.log(videoData?.videosPart.length);
   useEffect(() => {
     if (videoData) {
       setVideoState(videoData.promoVideoUrl);
+      setLoadingStatus(false);
     }
   }, [videoData]);
 
-  if (!videoData) return <div>Loading...</div>;
+  if (!videoData) return <div>Video getirilirken hata oluştu...</div>;
+  if (loadingStatus)
+    return <div className="text-white">Video Yükleniyor...</div>;
 
   return (
     <div className="w-full flex gap-[10px]">

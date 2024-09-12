@@ -43,7 +43,7 @@ const SideBarItems = ({
               !isOpen && "w-[20 px] h-[20px] "
             )}
           >
-            {icon} {/* SVG bileşenini doğrudan render edin */}
+            {icon} {/* SVG icon */}
           </div>
           <p
             className={cn(
