@@ -222,3 +222,4 @@ const SignUp = () => {
 };
 
 export default SignUp;
+export const runtime = "nodejs";
