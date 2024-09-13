@@ -14,6 +14,7 @@
     "clsx": "^2.1.1",
     "cookie": "^0.6.0",
     "firebase": "^10.13.1",
+    "firebase-admin": "^12.5.0",
     "jose": "^5.8.0",
     "next": "14.2.7",
     "react": "^18",

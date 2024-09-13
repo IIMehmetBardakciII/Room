@@ -1,5 +1,4 @@
 "use client";
-import { signUpWithGoogle } from "@/libs/actions/auth";
 import GoogleAndGithubAuth from "@/libs/components/organism/GoogleAndGithubAuth";
 import {
   EmailIcon,
