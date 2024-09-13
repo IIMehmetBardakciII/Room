@@ -1,51 +1,53 @@
 "use client";
-import {
-  EmailIcon,
-  ErrorIcon,
-  Github,
-  Google,
-  PasswordIcon,
-  SuccessCheck,
-  UsernameIcon,
-} from "@/libs/components/svgs";
+import GoogleAndGithubAuth from "@/libs/components/organism/GoogleAndGithubAuth";
+import { EmailIcon, ErrorIcon, PasswordIcon } from "@/libs/components/svgs";
 import Button from "@/libs/components/utils/Button";
 import { cn } from "@/libs/utils/cn";
 import { validateSignupForm } from "@/libs/zodValidationSchemas/signupValidation";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const SignIn = () => {
   const [errors, setErrors] = useState<{
-    username?: string;
     email?: string;
     password?: string;
   } | null>(null);
+  const [pending, setPending] = useState<boolean>(false);
+  const router = useRouter();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    setPending(true);
     const formData = new FormData(e.currentTarget);
-    const username = formData.get("username")?.toString() || "";
     const email = formData.get("email")?.toString() || "";
     const password = formData.get("password")?.toString() || "";
-    const validation = validateSignupForm({ username, email, password });
+    const validation = validateSignupForm({ email, password });
 
     if (!validation.success) {
       setErrors(validation.errors);
-      return;
+      setPending(false);
     }
 
-    formData.append("authMethod", "email");
+    try {
+      const response = await fetch("/api/auth/sign-in", {
+        method: "POST",
+        body: formData,
+      });
 
-    const response = await fetch("/api/auth/signup", {
-      method: "POST",
-      body: formData,
-    });
-
-    const result = await response.json();
-    if (!result.ok) {
-      console.log("Kullanıcı kaydedilemedi");
-    } else {
-      console.log("Kullanıcı oluşturuldu");
+      if (!response.ok) {
+        console.log("Kullanıcı kaydedilemedi");
+        setPending(false);
+        return;
+      } else {
+        console.log("Kullanıcı oluşturuldu");
+        setPending(false);
+        router.push("/");
+        window.location.reload();
+      }
+    } catch (error) {
+      console.error("API isteğinde bir hata oluştu:", error);
+      setPending(false); // Hata durumunda da pending'i kapatın
     }
   }
   return (
@@ -54,7 +56,7 @@ const SignIn = () => {
       <div className="w-[385px] bg-[#1B1B1B] max-h-[423px] pl-8 pr-[103px] py-[20px] ">
         <h3 className="text-white">Room'a Ücretsiz Kayıt Ol</h3>
         {/* Form For email/password/username */}
-        <form onSubmit={handleSubmit} className="">
+        <form onSubmit={handleSubmit}>
           {/* email input  */}
           <div className="flex flex-col  relative w-[250px] mt-2  ">
             <label
@@ -140,7 +142,7 @@ const SignIn = () => {
           <div className="flex gap-2">
             <Button
               buttonColor="blue"
-              text="Giriş Yap"
+              text={pending ? "Kullanıcı aranıyor" : "Giriş Yap"}
               buttonType="default"
               type="submit"
               className="mt-2"
@@ -155,20 +157,17 @@ const SignIn = () => {
             />
           </div>
         </form>
-        {/* Button For google auth with onclick event */}
-        <button className="flex w-[250px] bg-hoverBlue  text-white px-[14px] py-[10px] rounded-[5px] items-center hover:bg-defaultBlue transition-all ease-in-out  justify-center gap-2 mt-2">
-          <Google className="w-[14px] h-[14px]" />
-          <span className="h-[14px]">Google İle Giriş Yap</span>
-        </button>
-        {/* Button For github auth with onclick event */}
-        <button className="flex w-[250px] bg-[#24292E]  text-white px-[14px] py-[10px] rounded-[5px] items-center hover:bg-[#3c454e] transition-all ease-in-out  justify-center gap-2 mt-2">
-          <Github className="w-[14px] h-[14px]" />
-          <span className="h-[14px]">Github İle Giriş Yap</span>
-        </button>
+        <GoogleAndGithubAuth />
       </div>
       {/* İmage Container */}
       <div className="w-[547px] h-[423px] relative">
-        <Image src="/artwork.png" alt="artwork" fill className="object-cover" />
+        <Image
+          src="/artwork.png"
+          alt="artwork"
+          fill
+          className="object-cover"
+          sizes="(max-width: 547px)"
+        />
       </div>
     </div>
   );

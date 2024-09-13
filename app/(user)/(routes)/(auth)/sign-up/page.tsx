@@ -1,17 +1,17 @@
 "use client";
+import { signUpWithGoogle } from "@/libs/actions/auth";
+import GoogleAndGithubAuth from "@/libs/components/organism/GoogleAndGithubAuth";
 import {
   EmailIcon,
   ErrorIcon,
-  Github,
-  Google,
   PasswordIcon,
-  SuccessCheck,
   UsernameIcon,
 } from "@/libs/components/svgs";
 import Button from "@/libs/components/utils/Button";
 import { cn } from "@/libs/utils/cn";
 import { validateSignupForm } from "@/libs/zodValidationSchemas/signupValidation";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const SignUp = () => {
@@ -20,9 +20,13 @@ const SignUp = () => {
     email?: string;
     password?: string;
   } | null>(null);
+  const [pending, setPending] = useState(false);
+  const router = useRouter();
 
+  //* Email and Password Auth
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    setPending(true);
     const formData = new FormData(e.currentTarget);
     const username = formData.get("username")?.toString() || "";
     const email = formData.get("email")?.toString() || "";
@@ -36,18 +40,22 @@ const SignUp = () => {
 
     formData.append("authMethod", "email");
 
-    const response = await fetch("/api/auth/signup", {
+    const response = await fetch("/api/auth/sign-up", {
       method: "POST",
       body: formData,
     });
 
-    const result = await response.json();
-    if (!result.ok) {
+    if (!response.ok) {
       console.log("Kullanıcı kaydedilemedi");
     } else {
       console.log("Kullanıcı oluşturuldu");
+      setPending(false);
+      router.push("/");
+      window.location.reload();
     }
   }
+
+  //* Github Auth
   return (
     <div className="flex items-center justify-center w-full h-[491px]   relative top-[60px] ">
       {/* Form Elements */}
@@ -181,7 +189,7 @@ const SignUp = () => {
           <div className="flex gap-2">
             <Button
               buttonColor="blue"
-              text="Kayıt Ol"
+              text={pending ? "Kayıt İşlemi Yapılıyor" : "Kayıt Ol"}
               buttonType="default"
               type="submit"
               className="mt-2"
@@ -196,20 +204,18 @@ const SignUp = () => {
             />
           </div>
         </form>
-        {/* Button For google auth with onclick event */}
-        <button className="flex w-[250px] bg-hoverBlue  text-white px-[14px] py-[10px] rounded-[5px] items-center hover:bg-defaultBlue transition-all ease-in-out  justify-center gap-2 mt-2">
-          <Google className="w-[14px] h-[14px]" />
-          <span className="h-[14px]">Google İle Giriş Yap</span>
-        </button>
-        {/* Button For github auth with onclick event */}
-        <button className="flex w-[250px] bg-[#24292E]  text-white px-[14px] py-[10px] rounded-[5px] items-center hover:bg-[#3c454e] transition-all ease-in-out  justify-center gap-2 mt-2">
-          <Github className="w-[14px] h-[14px]" />
-          <span className="h-[14px]">Github İle Giriş Yap</span>
-        </button>
+        {/* Google & Github Auth */}
+        <GoogleAndGithubAuth />
       </div>
       {/* İmage Container */}
       <div className="w-[547px] h-full relative">
-        <Image src="/artwork.png" alt="artwork" fill className="object-cover" />
+        <Image
+          src="/artwork.png"
+          alt="artwork"
+          fill
+          className="object-cover"
+          sizes="(max-width: 547px)"
+        />
       </div>
     </div>
   );

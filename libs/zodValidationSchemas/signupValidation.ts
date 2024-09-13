@@ -15,7 +15,7 @@ const signUpSchema = z.object({
 });
 
 export const validateSignupForm = (data: {
-  username: string;
+  username?: string;
   email: string;
   password: string;
 }) => {
