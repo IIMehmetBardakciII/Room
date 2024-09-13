@@ -60,7 +60,7 @@ const SignUp = () => {
     <div className="flex items-center justify-center w-full h-[491px]   relative top-[60px] ">
       {/* Form Elements */}
       <div className="w-[385px] bg-[#1B1B1B] max-h-[491px] pl-8 pr-[103px] py-[20px] ">
-        <h3 className="text-white">Room'a Ücretsiz Kayıt Ol</h3>
+        <h3 className="text-white">Room&apos;a Ücretsiz Kayıt Ol</h3>
         {/* Form For email/password/username */}
         <form onSubmit={handleSubmit} className="">
           {/* username input  */}
@@ -128,7 +128,7 @@ const SignUp = () => {
                 type="email"
                 name="email"
                 id="email"
-                placeholder="Kullanıcı adınızı giriniz"
+                placeholder="Emailinizi giriniz"
                 className="px-[10px] py-2 rounded-[5px] placeholder:text-paragraphGray text-white bg-[transparent!important] focus:outline-none"
                 autoFocus
               />
@@ -169,7 +169,7 @@ const SignUp = () => {
                 type="password"
                 name="password"
                 id="password"
-                placeholder="Kullanıcı adınızı giriniz"
+                placeholder="Şifrenizi giriniz"
                 className="px-[10px] py-2 rounded-[5px] placeholder:text-paragraphGray text-white bg-[transparent!important] focus:outline-none"
                 autoFocus
               />

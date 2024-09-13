@@ -1,13 +1,13 @@
 import { IoMdSearch } from "react-icons/io";
 import Button from "../utils/Button";
 import NavbarClient from "./NavbarClient";
-import { useAuth } from "@/libs/hooks/useAuth";
 import NavbarAuthButtons from "./NavbarAuthButtons";
 import NavbarAuthProfile from "./NavbarAuthProfile";
+import { getCookies } from "@/libs/actions/Cookies";
 
 const Navbar = async () => {
   // For the sidebar state Context Hook
-  const { verifiedToken: token, success } = await useAuth();
+  const { verifiedToken: token, success } = await getCookies();
   const profilePicture = token?.profilePicture;
 
   return (

@@ -3,9 +3,8 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
 } from "firebase/auth";
-import { collection } from "firebase/firestore";
 import { jwtVerify } from "jose";
-import { auth, db } from "../firebase/config";
+import { auth } from "../firebase/config";
 
 export const getJwtSecretKey = () => {
   const secretKey = process.env.NEXT_PUBLIC_JWT_SECRET_KEY;

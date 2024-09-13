@@ -11,7 +11,7 @@ const isAuthPages = (url: string) =>
 //* url ise bizim şuan bulunduğumuz url i temsil eder.
 //* cookies de çerezlerimizi temsil eder tokenları ve diğer kişiye özgü user experinece ile ilgili bilgileri burda saklarız.
 //* Her üçüde requestten gelir. Şu şekilde desctructer edip kullanabilirsin const {url,nextUrl,cookies}=request;
-export async function middleware(request: NextRequest) {
+export default async function middleware(request: NextRequest) {
   // return NextResponse.redirect(new URL('/uploadvideos',request.url))
   const { url, nextUrl, cookies } = request;
 
@@ -52,4 +52,8 @@ export async function middleware(request: NextRequest) {
 //* Bu url lerden herhangi birinden get , post gibi request işlemi yapacak olursa araya girip önce middleware içeriğini çalıştırır sonra devam eder.
 export const config = {
   matcher: ["/sign-in", "/sign-up"],
+  unstable_allowDynamic: [
+    // use a glob to allow anything in the function-bind 3rd party module
+    "/node_modules/function-bind/**",
+  ],
 };

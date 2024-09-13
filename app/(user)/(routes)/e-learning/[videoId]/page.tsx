@@ -1,10 +1,10 @@
+import { getCookies } from "@/libs/actions/Cookies";
 import { getCommentsNumbers, getSingleVideo } from "@/libs/actions/Videos";
 import CommentsNumber from "@/libs/components/organism/CommentsNumber";
 import SingleVideoPageClient from "@/libs/components/organism/SingleVideoPageClient";
-import { useAuth } from "@/libs/hooks/useAuth";
 
 const SingleVideoPage = async ({ params }: { params: { videoId: string } }) => {
-  const { verifiedToken: token, success } = await useAuth();
+  const { verifiedToken: token } = await getCookies();
   const userType =
     token?.userType === "Free" || token?.userType === "Premium"
       ? token.userType
