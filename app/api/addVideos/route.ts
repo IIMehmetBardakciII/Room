@@ -134,7 +134,6 @@ import { NextResponse } from "next/server";
 import { v4 as uuidv4 } from "uuid";
 import { adminDb, adminStorage } from "@/libs/firebaseAdmin/config";
 import { Timestamp } from "firebase-admin/firestore";
-import { getStorage } from "firebase-admin/storage";
 
 export async function POST(request: Request) {
   try {
