@@ -130,11 +130,43 @@
 // }
 
 //! Admin Sdk
+
 import { NextResponse } from "next/server";
 import { v4 as uuidv4 } from "uuid";
 import { adminDb, adminStorage } from "@/libs/firebaseAdmin/config";
 import { Timestamp } from "firebase-admin/firestore";
+import { z } from "zod";
 
+// //* Video Max Size , Image Max Size , Chapter Max size
+const MAX_VIDEO_SIZE_MB = 50;
+const MAX_IMAGE_SIZE_MB = 5;
+
+// //! VIDEO SCHEMA BY ZOD
+const videoSchema = z.object({
+  videoTitle: z.string().min(1, "Title en az 10 karakter olmalı ve boş olamaz"),
+  videoDescription: z.string().min(1, "Description minimum 30 karakter olmalı"),
+  videoType: z.enum(["Free", "Premium"], {
+    invalid_type_error: "Geçersiz Video Tipi",
+    required_error: "Video Tipi Seçiniz",
+  }),
+  videoCategory: z.string().min(1, "Kategori boş olamaz"),
+  videoCoverImage: z
+    .instanceof(File)
+    .refine((file) => file.size <= MAX_IMAGE_SIZE_MB * 1024 * 1024, {
+      message: `Kapak resmi ${MAX_IMAGE_SIZE_MB}MB'dan büyük olamaz`,
+    }),
+  promoVideo: z
+    .instanceof(File)
+    .refine((file) => file.size <= MAX_VIDEO_SIZE_MB * 1024 * 1024, {
+      message: `Promo video ${MAX_VIDEO_SIZE_MB}MB'dan büyük olamaz`,
+    }),
+  chapters: z.array(
+    z.object({
+      title: z.string().min(1, "Bölüm başlığı boş olamaz"),
+      fileKey: z.string(), // fileKey bir string olmalı
+    })
+  ),
+});
 export async function POST(request: Request) {
   try {
     const formData = await request.formData();
@@ -146,6 +178,27 @@ export async function POST(request: Request) {
 
     const videoCoverImage = formData.get("videoCoverImage") as File;
     const promoVideo = formData.get("promoVideo") as File;
+
+    //     //* Şemayı kullanarak doğrulama
+    const validationResult = videoSchema.safeParse({
+      videoTitle,
+      videoDescription,
+      videoType,
+      videoCategory,
+      videoCoverImage,
+      promoVideo,
+      chapters,
+    });
+
+    if (!validationResult.success) {
+      //! Hata durumunda uygun hata mesajını döndür
+      return NextResponse.json(
+        {
+          error: validationResult.error.errors.map((e) => e.message).join(", "),
+        },
+        { status: 400 }
+      );
+    }
 
     // Video dosyaları için benzersiz ID oluşturun
     const videoId = uuidv4();
