@@ -3,10 +3,10 @@ import VideosCard from "@/libs/components/organism/VideosCard";
 
 const E_learning = async () => {
   const videos = await getAllVideos();
-  const apikey = process.env.NEXT_PUBLIC_FIREBASE_API_KEY;
+  const projectId = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID;
   return (
     <div className="grid grid-cols-1  gap-x-[60px] gap-y-[40px]  sm:grid-cols-3">
-      <p className="text-white">{apikey}</p>
+      <p className="text-white">{projectId}</p>
       {videos.map((video) => (
         <VideosCard
           key={video.id}
