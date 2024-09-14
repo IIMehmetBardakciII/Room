@@ -8,7 +8,7 @@ const E_learning = async () => {
     <div className="grid grid-cols-1  gap-x-[60px] gap-y-[40px]  sm:grid-cols-3">
       <p className="text-white">{process.env.FIREBASE_PRIVATE_KEY}</p>
       <p className="text-white">
-        {typeof process.env.FIREBASE_PRIVATE_KEY} Deneme
+        {typeof process.env.FIREBASE_PRIVATE_KEY} TYPEOF PRIVATE KEY
       </p>
       <p className="text-white">{type}</p>
 
