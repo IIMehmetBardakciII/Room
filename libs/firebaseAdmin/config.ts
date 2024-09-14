@@ -5,7 +5,7 @@ const privateKey =
 if (!admin.apps.length) {
   admin.initializeApp({
     credential: admin.credential.cert({
-      clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+      clientEmail: "firebase-adminsdk-kawk0@room-8facb.iam.gserviceaccount.com",
       privateKey: privateKey.replace(/\\n/g, "\n"),
       projectId: "room-8facb",
     }),
