@@ -30,6 +30,8 @@ jobs:
       - name: Vercel Deploy process
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_PROJECT: ${{ secrets.VERCEL_PROJECT }} # Vercel proje ID'si
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_TEAM_ID }} # Vercel organizasyon ID'si
         run: |
           npm install -g vercel
-          vercel --token $VERCEL_TOKEN
+          vercel --token $VERCEL_TOKEN --team $VERCEL_TEAM_ID --project $VERCEL_PROJECT_ID
