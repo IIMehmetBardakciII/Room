@@ -3,15 +3,9 @@ import VideosCard from "@/libs/components/organism/VideosCard";
 
 const E_learning = async () => {
   const videos = await getAllVideos();
-  const type = typeof process.env.FIREBASE_PRIVATE_KEY;
+
   return (
     <div className="grid grid-cols-1  gap-x-[60px] gap-y-[40px]  sm:grid-cols-3">
-      <p className="text-white">{process.env.FIREBASE_PRIVATE_KEY}</p>
-      <p className="text-white">
-        {typeof process.env.FIREBASE_PRIVATE_KEY} TYPEOF PRIVATE KEY
-      </p>
-      <p className="text-white">{type}</p>
-
       {/* {videos.map((video) => (
         <VideosCard
           key={video.id}
