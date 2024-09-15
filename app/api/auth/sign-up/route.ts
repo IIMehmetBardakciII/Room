@@ -175,12 +175,17 @@
 // }
 
 //! Admin Sdk alanı */
-import { adminAuth, adminDb } from "@/libs/firebaseAdmin/config"; // Admin SDK konfigürasyonunu doğru şekilde içe aktar
+import { initAdmin } from "@/libs/firebaseAdmin/config"; // Admin SDK konfigürasyonunu doğru şekilde içe aktar
 import { SignJWT } from "jose";
 import { NextResponse } from "next/server";
 import { getJwtSecretKey } from "@/libs/actions/auth";
 
 export async function POST(request: Request) {
+  initAdmin();
+  const admin = require("firebase-admin");
+  const adminAuth = admin.auth();
+  const adminDb = admin.firestore();
+
   const formdata = await request.formData();
   const email = formdata.get("email") || null;
   const username = formdata.get("username") || null;

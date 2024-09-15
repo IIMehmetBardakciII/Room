@@ -133,7 +133,7 @@
 
 import { NextResponse } from "next/server";
 import { v4 as uuidv4 } from "uuid";
-import { adminDb, adminStorage } from "@/libs/firebaseAdmin/config";
+import { initAdmin } from "@/libs/firebaseAdmin/config";
 import { Timestamp } from "firebase-admin/firestore";
 import { z } from "zod";
 
@@ -167,7 +167,13 @@ const videoSchema = z.object({
     })
   ),
 });
+
 export async function POST(request: Request) {
+  initAdmin();
+
+  const admin = require("firebase-admin");
+  const adminDb = admin.firestore();
+  const adminStorage = admin.storage().bucket();
   try {
     const formData = await request.formData();
     const videoTitle = formData.get("videoTitle") as string;
@@ -203,12 +209,8 @@ export async function POST(request: Request) {
     // Video dosyaları için benzersiz ID oluşturun
     const videoId = uuidv4();
 
-    const coverImageRef = adminStorage
-      .bucket()
-      .file(`Videos/${videoId}/coverImage`);
-    const promoVideoRef = adminStorage
-      .bucket()
-      .file(`Videos/${videoId}/promoVideo`);
+    const coverImageRef = adminStorage.file(`Videos/${videoId}/coverImage`);
+    const promoVideoRef = adminStorage.file(`Videos/${videoId}/promoVideo`);
 
     // File'ı Buffer'a çevirme
     const videoCoverBuffer = Buffer.from(await videoCoverImage.arrayBuffer());
@@ -228,10 +230,10 @@ export async function POST(request: Request) {
 
     // URL oluşturma
     const coverImageUrl = `https://firebasestorage.googleapis.com/v0/b/${
-      adminStorage.bucket().name
+      adminStorage.name
     }/o/${encodeURIComponent(`Videos/${videoId}/coverImage`)}?alt=media`;
     const promoVideoUrl = `https://firebasestorage.googleapis.com/v0/b/${
-      adminStorage.bucket().name
+      adminStorage.name
     }/o/${encodeURIComponent(`Videos/${videoId}/promoVideo`)}?alt=media`;
 
     console.log("Cover Image URL:", coverImageUrl);
@@ -245,9 +247,9 @@ export async function POST(request: Request) {
       const chapterFile = formData.get(`chapterFile${i}`) as File;
       if (chapterFile) {
         const chapterBuffer = Buffer.from(await chapterFile.arrayBuffer());
-        const chapterRef = adminStorage
-          .bucket()
-          .file(`Videos/${videoId}/chapters/${uuidv4()}`);
+        const chapterRef = adminStorage.file(
+          `Videos/${videoId}/chapters/${uuidv4()}`
+        );
 
         // Dosyayı yükleme
         await chapterRef.save(chapterBuffer, { contentType: chapterFile.type });
@@ -257,7 +259,7 @@ export async function POST(request: Request) {
 
         // URL oluşturma
         const chapterUrl = `https://firebasestorage.googleapis.com/v0/b/${
-          adminStorage.bucket().name
+          adminStorage.name
         }/o/${encodeURIComponent(chapterRef.name)}?alt=media`;
 
         chapterData.push({

@@ -65,12 +65,17 @@
 
 // export const runtime = "nodejs";
 import { getJwtSecretKey } from "@/libs/actions/auth";
-import { adminAuth, adminDb } from "@/libs/firebaseAdmin/config"; // admin SDK yapılandırması
+import { initAdmin } from "@/libs/firebaseAdmin/config"; // admin SDK yapılandırması
 import { SignJWT } from "jose";
 import { NextResponse } from "next/server";
 import { DocumentData, QuerySnapshot } from "firebase-admin/firestore";
 
 export async function POST(request: Request) {
+  initAdmin();
+  const admin = require("firebase-admin");
+  const adminAuth = admin.auth();
+  const adminDb = admin.firestore();
+
   console.log("Request işlemi geliyor");
   const formdata = await request.formData();
   const email = formdata.get("email") || null;
