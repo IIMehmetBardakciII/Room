@@ -7,6 +7,7 @@ type ButtonProps = {
   className?: string;
   disabled?: boolean;
   type?: "button" | "submit" | "reset";
+  href?: string;
 };
 
 const buttonStyles = {
@@ -28,21 +29,24 @@ const Button = ({
   className,
   disabled = false,
   type,
+  href = "/",
 }: ButtonProps) => {
   const buttonClass = buttonStyles[buttonType][buttonColor];
 
   return (
-    <button
-      type={type}
-      className={cn(
-        `px-4 py-[10px] max-sm:px-1 max-sm:py-[2px] rounded-[5px]`,
-        buttonClass,
-        className,
-        disabled ? disabledStyles : ""
-      )}
-    >
-      <p className="max-sm:text-[12px]">{text}</p>
-    </button>
+    <a href={href}>
+      <button
+        type={type}
+        className={cn(
+          `px-4 py-[10px] max-sm:px-1 max-sm:py-[2px] rounded-[5px]`,
+          buttonClass,
+          className,
+          disabled ? disabledStyles : ""
+        )}
+      >
+        <p className="max-sm:text-[12px]">{text}</p>
+      </button>
+    </a>
   );
 };
 

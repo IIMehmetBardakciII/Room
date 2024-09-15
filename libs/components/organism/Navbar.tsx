@@ -1,10 +1,14 @@
 import { IoMdSearch } from "react-icons/io";
 import Button from "../utils/Button";
-import Image from "next/image";
 import NavbarClient from "./NavbarClient";
+import NavbarAuthButtons from "./NavbarAuthButtons";
+import NavbarAuthProfile from "./NavbarAuthProfile";
+import { getCookies } from "@/libs/actions/Cookies";
 
-const Navbar = () => {
+const Navbar = async () => {
   // For the sidebar state Context Hook
+  const { verifiedToken: token, success } = await getCookies();
+  const profilePicture = token?.profilePicture;
 
   return (
     <header className="w-[calc(100%-32px)] fixed z-50  ">
@@ -56,16 +60,12 @@ const Navbar = () => {
         {/* Navigation Buttons & Profile pictures */}
         <div className="flex gap-5">
           <nav className="flex gap-4 max-lg:hidden">
-            {/* Kayıt Ol Button */}
-            <Button text="Kayıt Ol" buttonColor="blue" buttonType="default" />
-            {/* Giriş Yap Button */}
-            <Button text="Giriş Yap" buttonColor="blue" buttonType="ghost" />
-
+            <NavbarAuthButtons tokenStatus={success} />
             {/* Premiumlu Ol Button */}
             <Button
               text="Premiumlu Ol"
               buttonColor="green"
-              buttonType="ghost"
+              buttonType={success ? "default" : "ghost"}
             />
           </nav>
           <nav className=" max-lg:block hidden">
@@ -73,14 +73,14 @@ const Navbar = () => {
             <Button text="Oturum Aç" buttonColor="blue" buttonType="default" />
           </nav>
           {/* Giriş yapınca PP gözükür */}
-          <div className="w-[47px] h-[47px] rounded-full relative bg-textGray hidden">
-            <Image
-              src="/ProfilFoto.png"
-              alt="pp"
-              fill
-              className="object-cover"
-            />
-          </div>
+          <NavbarAuthProfile
+            profilePicture={
+              typeof profilePicture === "string"
+                ? profilePicture
+                : "/ProfilFoto.png"
+            }
+            tokenStatus={success}
+          />
         </div>
       </div>
     </header>

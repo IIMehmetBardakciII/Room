@@ -8,9 +8,14 @@ type Chapter = {
 type AddChapterProps = {
   chapters: Chapter[];
   setChapters: (chapters: Chapter[]) => void;
+  pendingState: boolean;
 };
 
-const AddChapter = ({ chapters, setChapters }: AddChapterProps) => {
+const AddChapter = ({
+  chapters,
+  setChapters,
+  pendingState,
+}: AddChapterProps) => {
   const addChapter = () => {
     setChapters([...chapters, { title: "", file: null }]);
   };
@@ -76,7 +81,11 @@ const AddChapter = ({ chapters, setChapters }: AddChapterProps) => {
         buttonColor="blue"
         buttonType="default"
         text={
-          chapters.length <= 0 ? "Henüz Chapter Eklemedin" : "Video Oluştur"
+          pendingState
+            ? "Video Oluşturuluyor"
+            : chapters.length <= 0
+            ? "Henüz Chapter Eklemedin"
+            : "Video Oluştur"
         }
         className={"w-fit"}
         disabled={chapters.length <= 0}

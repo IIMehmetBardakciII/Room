@@ -8,6 +8,22 @@ const nextConfig = {
         hostname: "firebasestorage.googleapis.com",
         pathname: "/**", // Tüm yolları kapsayacak şekilde ayarlandı
       },
+
+      {
+        protocol: "https",
+        hostname: "lh3.googleusercontent.com",
+        pathname: "/**", // Tüm yolları kapsayacak şekilde ayarlandı
+      },
+      {
+        protocol: "https",
+        hostname: "avatars.githubusercontent.com",
+        pathname: "/**", // Tüm yolları kapsayacak şekilde ayarlandı
+      },
+      {
+        protocol: "https",
+        hostname: "storage.googleapis.com",
+        pathname: "/**", // Tüm yolları kapsayacak şekilde ayarlandı
+      },
     ],
   },
   compiler: { styledComponents: true },

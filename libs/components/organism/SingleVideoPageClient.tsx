@@ -4,6 +4,7 @@
 import { useState, useEffect } from "react";
 import StaticVideoRate from "../utils/StaticVideoRate";
 import { cn } from "@/libs/utils/cn";
+import { useRouter } from "next/navigation";
 
 type SingleVideoPageClientProps = {
   id: string;
@@ -20,15 +21,23 @@ type SingleVideoPageClientProps = {
 type SingleVideoPageClientComponentProps = {
   videoData: SingleVideoPageClientProps | null;
   commentsNumber: React.ReactNode; // Type for commentsNumber
+  userType: "Free" | "Premium";
 };
 const SingleVideoPageClient = ({
   videoData,
   commentsNumber,
+  userType,
 }: SingleVideoPageClientComponentProps) => {
+  const router = useRouter();
+  const [loadingStatus, setLoadingStatus] = useState(true);
   const [videoState, setVideoState] = useState<string | null>("");
   const [stateChapterNumber, setStateChapterNumber] = useState<number>(0);
   const [descriptionState, setDescriptionState] = useState(false);
-  function changeVideo(setIndex: number) {
+  const videoType = videoData?.videoType;
+  function handleChapter(setIndex: number) {
+    if (videoType === "Premium" && userType === "Free") {
+      router.push("/premium");
+    }
     videoData?.videosPart.map((video, index) => {
       if (index === setIndex) {
         setVideoState(video.fileUrl);
@@ -36,14 +45,16 @@ const SingleVideoPageClient = ({
       }
     });
   }
-  console.log(videoData?.videosPart.length);
   useEffect(() => {
     if (videoData) {
       setVideoState(videoData.promoVideoUrl);
+      setLoadingStatus(false);
     }
   }, [videoData]);
 
-  if (!videoData) return <div>Loading...</div>;
+  if (!videoData) return <div>Video getirilirken hata oluştu...</div>;
+  if (loadingStatus)
+    return <div className="text-white">Video Yükleniyor...</div>;
 
   return (
     <div className="w-full flex gap-[10px]">
@@ -124,7 +135,7 @@ const SingleVideoPageClient = ({
                 : "bg-sidebarNavHover hover:bg-defaultBlue transition-all ease-in-out"
             )}
             key={index}
-            onClick={() => changeVideo(index)}
+            onClick={() => handleChapter(index)}
           >
             <p className="text-white ">{chapter.title}</p>
           </div>

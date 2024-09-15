@@ -11,26 +11,26 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "../firebase/config";
+import { VideoType } from "../types/types";
 
-type Chapter = {
-  title: string;
-  fileUrl: string;
-};
+// type Chapter = {
+//   title: string;
+//   fileUrl: string;
+// };
 
-type Video = {
-  id: string;
-  title: string;
-  description: string;
-  promoVideoUrl: string;
-  coverImageUrl: string;
-  createdAt: Date;
-  categoryId: string; // categoryId eklenmiştir
-  videosPart: Chapter[];
-  videoType: "Free" | "Premium"; // videoType eklenmiştir
-  rate: number;
-};
-
-export async function getAllVideos(): Promise<Video[]> {
+// type Video = {
+//   id: string;
+//   title: string;
+//   description: string;
+//   promoVideoUrl: string;
+//   coverImageUrl: string;
+//   createdAt: Date;
+//   categoryId: string; // categoryId eklenmiştir
+//   videosPart: Chapter[];
+//   videoType: "Free" | "Premium"; // videoType eklenmiştir
+//   rate: number;
+// };
+export async function getAllVideos(): Promise<VideoType[]> {
   const collectionRef = collection(db, "Videos");
   const queryForSort = query(
     collectionRef,
@@ -38,7 +38,7 @@ export async function getAllVideos(): Promise<Video[]> {
     limit(10)
   );
   const snapshot = await getDocs(queryForSort);
-  const videos: Video[] = snapshot.docs.map((doc) => {
+  const videos: VideoType[] = snapshot.docs.map((doc) => {
     const data = doc.data();
 
     return {
@@ -68,7 +68,7 @@ export async function getAllVideos(): Promise<Video[]> {
 
 export async function getSingleVideo(
   documentId: string
-): Promise<Video | null> {
+): Promise<VideoType | null> {
   const docRef = doc(db, "Videos", documentId);
   const docSnap = await getDoc(docRef);
 

@@ -17,9 +17,11 @@ const Dashboard = () => {
   const [chapters, setChapters] = useState<Chapter[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [pending, setPending] = useState<boolean>(false);
   const router = useRouter();
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    setPending(true);
     const formData = new FormData(e.currentTarget);
 
     // Chapter verilerini JSON olarak ekleyin
@@ -45,9 +47,11 @@ const Dashboard = () => {
     if (response.ok) {
       setSuccessMessage("Video başarıyla yüklendi!");
       setError(null);
+      setPending(false);
       router.push("/e-learning");
     } else {
       setError(data.error);
+      setPending(false);
       setSuccessMessage(null);
     }
   }
@@ -181,7 +185,11 @@ const Dashboard = () => {
         </div>
         {/* Video Chapter Part */}
         <div className="flex flex-1">
-          <AddChapter chapters={chapters} setChapters={setChapters} />
+          <AddChapter
+            pendingState={pending}
+            chapters={chapters}
+            setChapters={setChapters}
+          />
         </div>
       </form>
       <div className="w-fit h-full mt-4">

@@ -3,7 +3,7 @@ import SideBarItems from "../utils/SidebarItems";
 import { sidebarNavItems } from "@/libs/content/staticData";
 import { useSidebar } from "@/libs/context/SidebarProvider";
 import { cn } from "@/libs/utils/cn";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 const SideBar = () => {
   const { isOpen } = useSidebar();

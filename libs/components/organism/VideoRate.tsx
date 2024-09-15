@@ -9,7 +9,6 @@ type videoRatePropsType = {
 const VideoRate = ({ videoId }: videoRatePropsType) => {
   const [rating, setRating] = useState<number | null>(null);
   const [rateColor, setRateColor] = useState<number | null>(null);
-  console.log(rating);
   return (
     <div className="flex items-center ">
       {[...Array(5)].map((_star, index) => {
