@@ -179,6 +179,7 @@ import { initAdmin } from "@/libs/firebaseAdmin/config"; // Admin SDK konfigüra
 import { SignJWT } from "jose";
 import { NextResponse } from "next/server";
 import { getJwtSecretKey } from "@/libs/actions/auth";
+import { QuerySnapshot, DocumentData } from "firebase/firestore";
 
 export async function POST(request: Request) {
   initAdmin();
@@ -276,10 +277,50 @@ export async function POST(request: Request) {
             };
             await collectionRef.doc(userUid).set(userData);
           }
+          //* User Datayı almak.
           const userData = (await collectionRef.doc(userUid).get()).data();
+          const userEmail = userData.email;
+          //* Query için collectionRefi almak users collectionu çağırmak.
+          const UserCollectionRef = adminDb.collection("users");
+          //* Query ile users collectionunda email değişkeni bizim datadan gelen emaille eşleşeni almak için query.
+          const userQuery = UserCollectionRef.where("email", "==", userEmail);
+          //* Anlık eşleşen veriyi çağırmak
+          const querySnapShot: QuerySnapshot<DocumentData> =
+            await userQuery.get();
+          //* Subscriptions durumunu incelemek için ref
+          const SubscriptionsCollectionRef =
+            adminDb.collection("subscriptions");
+          //* Subscriptions durumunu incelemek için Query email eşleşme durumu
+          const subscriptionQuery = SubscriptionsCollectionRef.where(
+            "userEmail",
+            "==",
+            userEmail
+          );
+          let userType = "Free";
+          //* Eşleşen değeri çağırmak subscriptiondan
+          const subscriptionSnapShot: QuerySnapshot<DocumentData> =
+            await subscriptionQuery.get();
+          //* Subscription değeri boş değilse yani bir değer döndüyse snapShottan işlemleri devam ettir
+          if (!subscriptionSnapShot.empty) {
+            //* Gelen veriyi çek
+            const subscriptionData = subscriptionSnapShot.docs[0].data();
+            //* Gelen verideki endDatei alarak compare(kıyaslama ) yapma adımı.
+            const endDate = subscriptionData.endDate.toDate();
+            const nowDate = new Date();
+            //* Eğer endDate > nowDate ten abonelik süresi hala geçerli aksi halde geçersiz
+            if (endDate > nowDate) {
+              userType = "Premium";
+            } else {
+              // Abonelik süresi bitmiş, kullanıcıyı "Free" olarak güncelle
+              const userDocRef = UserCollectionRef.doc(
+                querySnapShot.docs[0].id
+              ); // Kullanıcının döküman referansını al
+              await userDocRef.update({ userType: "Free" }); // userType'ı "Free" olarak güncelle
+            }
+          }
           const token = await new SignJWT({
             email: userData?.email,
-            userType: userData?.userType,
+            userType: userType,
             username: userData?.username,
             profilePicture: userData?.profilePicture,
           })
@@ -317,9 +358,48 @@ export async function POST(request: Request) {
             await collectionRef.doc(userUid).set(userData);
           }
           const userData = (await collectionRef.doc(userUid).get()).data();
+          const userEmail = userData.email;
+          //* Query için collectionRefi almak users collectionu çağırmak.
+          const UserCollectionRef = adminDb.collection("users");
+          //* Query ile users collectionunda email değişkeni bizim datadan gelen emaille eşleşeni almak için query.
+          const userQuery = UserCollectionRef.where("email", "==", userEmail);
+          //* Anlık eşleşen veriyi çağırmak
+          const querySnapShot: QuerySnapshot<DocumentData> =
+            await userQuery.get();
+          //* Subscriptions durumunu incelemek için ref
+          const SubscriptionsCollectionRef =
+            adminDb.collection("subscriptions");
+          //* Subscriptions durumunu incelemek için Query email eşleşme durumu
+          const subscriptionQuery = SubscriptionsCollectionRef.where(
+            "userEmail",
+            "==",
+            userEmail
+          );
+          let userType = "Free";
+          //* Eşleşen değeri çağırmak subscriptiondan
+          const subscriptionSnapShot: QuerySnapshot<DocumentData> =
+            await subscriptionQuery.get();
+          //* Subscription değeri boş değilse yani bir değer döndüyse snapShottan işlemleri devam ettir
+          if (!subscriptionSnapShot.empty) {
+            //* Gelen veriyi çek
+            const subscriptionData = subscriptionSnapShot.docs[0].data();
+            //* Gelen verideki endDatei alarak compare(kıyaslama ) yapma adımı.
+            const endDate = subscriptionData.endDate.toDate();
+            const nowDate = new Date();
+            //* Eğer endDate > nowDate ten abonelik süresi hala geçerli aksi halde geçersiz
+            if (endDate > nowDate) {
+              userType = "Premium";
+            } else {
+              // Abonelik süresi bitmiş, kullanıcıyı "Free" olarak güncelle
+              const userDocRef = UserCollectionRef.doc(
+                querySnapShot.docs[0].id
+              ); // Kullanıcının döküman referansını al
+              await userDocRef.update({ userType: "Free" }); // userType'ı "Free" olarak güncelle
+            }
+          }
           const token = await new SignJWT({
             email: userData?.email,
-            userType: userData?.userType,
+            userType: userType,
             username: userData?.username,
             profilePicture: userData?.profilePicture,
           })

@@ -108,11 +108,35 @@ export async function POST(request: Request) {
       }
 
       const userData = querySnapShot.docs[0].data();
+      const userEmail = userData.email;
+      // Abonelik bilgilerini kontrol et
+      const SubscriptionsCollectionRef = adminDb.collection("subscriptions");
+      const subscriptionQuery = SubscriptionsCollectionRef.where(
+        "userEmail",
+        "==",
+        userEmail
+      );
+      let userType = "Free";
+      const subscriptionSnapShot: QuerySnapshot<DocumentData> =
+        await subscriptionQuery.get();
+      if (!subscriptionSnapShot.empty) {
+        const subscriptionData = subscriptionSnapShot.docs[0].data();
+        const endDate = subscriptionData.endDate.toDate();
+
+        const nowDate = new Date();
+        if (endDate > nowDate) {
+          userType = "Premium";
+        } else {
+          // Abonelik süresi bitmiş, kullanıcıyı "Free" olarak güncelle
+          const userDocRef = UserCollectionRef.doc(querySnapShot.docs[0].id); // Kullanıcının döküman referansını al
+          await userDocRef.update({ userType: "Free" }); // userType'ı "Free" olarak güncelle
+        }
+      }
 
       // Token oluştur
       const token = await new SignJWT({
         email: userData.email,
-        userType: userData.userType,
+        userType,
         username: userData.username,
         profilePicture: userData.profilePicture,
       })

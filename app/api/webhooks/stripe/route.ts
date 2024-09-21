@@ -248,6 +248,7 @@ export async function POST(req: NextRequest) {
     { status: 200 }
   );
   // Cookie'deki userType'ı güncelle
+
   response.cookies.set(
     "token",
     JSON.stringify({ ...token, userType: "Premium" }),
