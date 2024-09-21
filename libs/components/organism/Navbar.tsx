@@ -66,7 +66,6 @@ const Navbar = async () => {
               text="Premiumlu Ol"
               buttonColor="green"
               buttonType={success ? "default" : "ghost"}
-              href="/premium"
             />
           </nav>
           <nav className=" max-lg:block hidden">

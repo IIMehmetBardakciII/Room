@@ -1,5 +1,5 @@
-const PremiumPage = () => {
-  return <div>PremiumPage</div>;
+const Premium = () => {
+  return <div>Premium</div>;
 };
 
-export default PremiumPage;
+export default Premium;
