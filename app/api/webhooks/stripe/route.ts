@@ -120,143 +120,169 @@
 //     return NextResponse.json({ error: "Webhook error" }, { status: 400 });
 //   }
 // }
+//!---------------------------------------------------
+// import Stripe from "stripe";
+// import { stripe } from "@/libs/stripe/config";
+// import { NextRequest, NextResponse } from "next/server";
+// import { initAdmin } from "@/libs/firebaseAdmin/config";
+// import { DocumentData, QuerySnapshot } from "firebase-admin/firestore";
+// import { Timestamp } from "firebase-admin/firestore";
+// import { getCookies } from "@/libs/actions/Cookies";
+
+// const WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_KEY!;
+
+// export async function POST(req: NextRequest) {
+//   const body = await req.text();
+//   const { verifiedToken: token } = await getCookies();
+//   const sig = req.headers.get("stripe-signature")!;
+//   let event: Stripe.Event;
+
+//   try {
+//     event = stripe.webhooks.constructEvent(body, sig, WEBHOOK_SECRET);
+//   } catch (error: any) {
+//     console.error("Webhook signature verification failed.", error.message);
+//     return NextResponse.json(
+//       { error: `Webhook Error: ${error.message}` },
+//       { status: 400 }
+//     );
+//   }
+
+//   initAdmin();
+//   const admin = require("firebase-admin");
+//   const adminDb = admin.firestore();
+
+//   const collection = adminDb.collection("users");
+
+//   try {
+//     switch (event.type) {
+//       case "checkout.session.completed":
+//         const session = await stripe.checkout.sessions.retrieve(
+//           (event.data.object as Stripe.Checkout.Session).id,
+//           {
+//             expand: ["line_items"],
+//           }
+//         );
+
+//         const customerDetails = session.customer_details;
+//         if (!customerDetails || !customerDetails.email) {
+//           console.error("Customer details or email not found");
+//           return NextResponse.json(
+//             { error: "Customer details not found" },
+//             { status: 404 }
+//           );
+//         }
+
+//         const lineItems = session.line_items?.data || [];
+//         for (const item of lineItems) {
+//           const priceId = item.price?.id;
+//           const isSubscription = item.price?.type === "recurring";
+
+//           if (isSubscription) {
+//             let endDate: Timestamp;
+//             let priceType: string;
+
+//             if (priceId === process.env.STRIPE_YEARLY_PRICE_ID!) {
+//               const currentDate = new Date();
+//               currentDate.setFullYear(currentDate.getFullYear() + 1);
+//               endDate = Timestamp.fromDate(currentDate);
+//               priceType = "Yearly";
+//             } else if (priceId === process.env.STRIPE_MONTHLY_PRICE_ID!) {
+//               const currentDate = new Date();
+//               currentDate.setMonth(currentDate.getMonth() + 1);
+//               endDate = Timestamp.fromDate(currentDate);
+//               priceType = "Monthly";
+//             } else {
+//               throw new Error("Invalid priceId");
+//             }
+
+//             const subscriptionsData = {
+//               userEmail: customerDetails.email,
+//               startDate: Timestamp.now(),
+//               endDate,
+//               priceType,
+//             };
+
+//             try {
+//               await adminDb.collection("subscriptions").add(subscriptionsData);
+//             } catch (err) {
+//               console.error("Error adding subscription:", err);
+//             }
+//           }
+//         }
+
+//         const userQuery = collection.where(
+//           "email",
+//           "==",
+//           customerDetails.email
+//         );
+//         const querySnapShot: QuerySnapshot<DocumentData> =
+//           await userQuery.get();
+
+//         if (querySnapShot.empty) {
+//           console.log(
+//             `User document not found for email: ${customerDetails.email}`
+//           );
+//           return NextResponse.json(
+//             { error: "Kullanıcı Bulunamadı." },
+//             { status: 404 }
+//           );
+//         }
+
+//         const userDocId = querySnapShot.docs[0].id;
+//         await collection.doc(userDocId).update({
+//           userType: "Premium",
+//         });
+
+//         console.log("Kullanıcı tipi güncellendi:", customerDetails.email);
+//         break;
+
+//       default:
+//         console.log(`Unhandled event type ${event.type}`);
+//         break;
+//     }
+//   } catch (error: any) {
+//     console.error("Error handling event:", error);
+//     return NextResponse.json({ error: "Webhook error" }, { status: 400 });
+//   }
+
+//   // Cookie'deki userType'ı güncelle
+
+//   return NextResponse.json({ message: "Webhook received" }, { status: 200 });
+// }
+//* --------------- Last hit
 
 import Stripe from "stripe";
 import { stripe } from "@/libs/stripe/config";
-import { NextRequest, NextResponse } from "next/server";
-import { initAdmin } from "@/libs/firebaseAdmin/config";
-import { DocumentData, QuerySnapshot } from "firebase-admin/firestore";
-import { Timestamp } from "firebase-admin/firestore";
-import { getCookies } from "@/libs/actions/Cookies";
+import { NextResponse } from "next/server";
 
 const WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_KEY!;
-
-export async function POST(req: NextRequest) {
+export async function POST(req: Request) {
   const body = await req.text();
-  const { verifiedToken: token } = await getCookies();
   const sig = req.headers.get("stripe-signature")!;
   let event: Stripe.Event;
-
   try {
     event = stripe.webhooks.constructEvent(body, sig, WEBHOOK_SECRET);
   } catch (error: any) {
     console.error("Webhook signature verification failed.", error.message);
     return NextResponse.json(
-      { error: `Webhook Error: ${error.message}` },
+      { message: `Webhook error ${error.message}` },
       { status: 400 }
     );
   }
-
-  initAdmin();
-  const admin = require("firebase-admin");
-  const adminDb = admin.firestore();
-
-  const collection = adminDb.collection("users");
-
+  // handle the event
   try {
     switch (event.type) {
       case "checkout.session.completed":
-        const session = await stripe.checkout.sessions.retrieve(
-          (event.data.object as Stripe.Checkout.Session).id,
-          {
-            expand: ["line_items"],
-          }
-        );
-
-        const customerDetails = session.customer_details;
-        if (!customerDetails || !customerDetails.email) {
-          console.error("Customer details or email not found");
-          return NextResponse.json(
-            { error: "Customer details not found" },
-            { status: 404 }
-          );
-        }
-
-        const lineItems = session.line_items?.data || [];
-        for (const item of lineItems) {
-          const priceId = item.price?.id;
-          const isSubscription = item.price?.type === "recurring";
-
-          if (isSubscription) {
-            let endDate: Timestamp;
-            let priceType: string;
-
-            if (priceId === process.env.STRIPE_YEARLY_PRICE_ID!) {
-              const currentDate = new Date();
-              currentDate.setFullYear(currentDate.getFullYear() + 1);
-              endDate = Timestamp.fromDate(currentDate);
-              priceType = "Yearly";
-            } else if (priceId === process.env.STRIPE_MONTHLY_PRICE_ID!) {
-              const currentDate = new Date();
-              currentDate.setMonth(currentDate.getMonth() + 1);
-              endDate = Timestamp.fromDate(currentDate);
-              priceType = "Monthly";
-            } else {
-              throw new Error("Invalid priceId");
-            }
-
-            const subscriptionsData = {
-              userEmail: customerDetails.email,
-              startDate: Timestamp.now(),
-              endDate,
-              priceType,
-            };
-
-            try {
-              await adminDb.collection("subscriptions").add(subscriptionsData);
-            } catch (err) {
-              console.error("Error adding subscription:", err);
-            }
-          }
-        }
-
-        const userQuery = collection.where(
-          "email",
-          "==",
-          customerDetails.email
-        );
-        const querySnapShot: QuerySnapshot<DocumentData> =
-          await userQuery.get();
-
-        if (querySnapShot.empty) {
-          console.log(
-            `User document not found for email: ${customerDetails.email}`
-          );
-          return NextResponse.json(
-            { error: "Kullanıcı Bulunamadı." },
-            { status: 404 }
-          );
-        }
-
-        const userDocId = querySnapShot.docs[0].id;
-        await collection.doc(userDocId).update({
-          userType: "Premium",
-        });
-
-        console.log("Kullanıcı tipi güncellendi:", customerDetails.email);
+        console.log("Denemeeeee");
         break;
 
       default:
-        console.log(`Unhandled event type ${event.type}`);
+        console.log(`unhandled event type ${event.type} `);
         break;
     }
-  } catch (error: any) {
-    console.error("Error handling event:", error);
-    return NextResponse.json({ error: "Webhook error" }, { status: 400 });
+  } catch (error) {
+    console.error("Error  handling event", error);
+    return new Response("Webhook error", { status: 400 });
   }
-  const response = NextResponse.json(
-    { message: "Webhook received" },
-    { status: 200 }
-  );
-  // Cookie'deki userType'ı güncelle
-
-  response.cookies.set(
-    "token",
-    JSON.stringify({ ...token, userType: "Premium" }),
-    {
-      httpOnly: true,
-      path: "/", // Cookie'nin geçerli olacağı yol
-    }
-  );
-  return response;
+  return new Response("Webhook received", { status: 200 });
 }
