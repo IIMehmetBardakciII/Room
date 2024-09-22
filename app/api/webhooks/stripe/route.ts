@@ -127,20 +127,21 @@ import { NextRequest, NextResponse } from "next/server";
 import { initAdmin } from "@/libs/firebaseAdmin/config";
 import { DocumentData, QuerySnapshot } from "firebase-admin/firestore";
 import { Timestamp } from "firebase-admin/firestore";
-import { getCookies } from "@/libs/actions/Cookies";
-
-const WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_KEY!;
 
 export async function POST(req: NextRequest) {
   const body = await req.text();
-  const { verifiedToken: token } = await getCookies();
   const sig = req.headers.get("stripe-signature")!;
+  console.log("Received Stripe signature:", sig);
   let event: Stripe.Event;
-
+  console.log("Request body", body);
   try {
-    event = stripe.webhooks.constructEvent(body, sig, WEBHOOK_SECRET);
+    event = stripe.webhooks.constructEvent(
+      body,
+      sig,
+      process.env.STRIPE_WEBHOOK_KEY!
+    );
   } catch (error: any) {
-    console.error("Webhook signature verification failed.", error.message);
+    console.log("Webhook signature verification failed.", error.message);
     return NextResponse.json(
       { error: `Webhook Error: ${error.message}` },
       { status: 400 }
