@@ -1,6 +1,5 @@
 import { getCookies } from "@/libs/actions/Cookies";
 import { SuccessCheck } from "@/libs/components/svgs";
-import Image from "next/image";
 
 const Premium = async () => {
   const { verifiedToken: token, success } = await getCookies();

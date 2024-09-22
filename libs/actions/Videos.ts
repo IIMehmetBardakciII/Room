@@ -35,7 +35,7 @@ export async function getAllVideos(): Promise<VideoType[]> {
   const queryForSort = query(
     collectionRef,
     orderBy("createdAt", "desc"),
-    limit(10)
+    limit(9)
   );
   const snapshot = await getDocs(queryForSort);
   const videos: VideoType[] = snapshot.docs.map((doc) => {

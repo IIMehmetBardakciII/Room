@@ -234,6 +234,7 @@ export async function POST(req: NextRequest) {
         });
 
         console.log("Kullanıcı tipi güncellendi:", customerDetails.email);
+        break;
 
       default:
         console.log(`Unhandled event type ${event.type}`);
