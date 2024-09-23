@@ -11,12 +11,14 @@ const E_learning = async () => {
   const STRIPE_WEBHOOK_KEY = process.env.STRIPE_WEBHOOK_KEY;
   return (
     <div className="grid grid-cols-1  gap-x-[60px] gap-y-[40px]  sm:grid-cols-3">
-      <h1>{STRIPE_MONTHLY_PLAN_LINK}</h1>
-      <h1>{STRIPE_YEARLY_PLAN_LINK}</h1>
-      <h1>{STRIPE_MONTHLY_PRICE_ID}</h1>
-      <h1>{STRIPE_YEARLY_PRICE_ID}</h1>
-      <h1>{STRIPE_SECRET_KEY}</h1>
-      <h1>{STRIPE_WEBHOOK_KEY}</h1>
+      <div className="flex flex-col">
+        <p className="text-white">{STRIPE_MONTHLY_PLAN_LINK}</p>
+        <p className="text-white">{STRIPE_YEARLY_PLAN_LINK}</p>
+        <p className="text-white">{STRIPE_MONTHLY_PRICE_ID}</p>
+        <p className="text-white">{STRIPE_YEARLY_PRICE_ID}</p>
+        <p className="text-white">{STRIPE_SECRET_KEY}</p>
+        <p className="text-white">{STRIPE_WEBHOOK_KEY}</p>
+      </div>
       {/* {videos.map((video) => (
         <VideosCard
           key={video.id}
