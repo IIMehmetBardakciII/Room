@@ -122,7 +122,7 @@
 // }
 //!---------------------------------------------------
 import Stripe from "stripe";
-import { stripe } from "@/libs/stripe/config";
+// import { stripe } from "@/libs/stripe/config";
 import { NextRequest, NextResponse } from "next/server";
 import { initAdmin } from "@/libs/firebaseAdmin/config";
 import {
@@ -131,6 +131,7 @@ import {
   Timestamp,
 } from "firebase-admin/firestore";
 
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 export async function POST(req: NextRequest) {
   const body = await req.text();
   const sig = req.headers.get("stripe-signature")!;
