@@ -125,8 +125,11 @@ import Stripe from "stripe";
 import { stripe } from "@/libs/stripe/config";
 import { NextRequest, NextResponse } from "next/server";
 import { initAdmin } from "@/libs/firebaseAdmin/config";
-import { DocumentData, QuerySnapshot } from "firebase-admin/firestore";
-import { Timestamp } from "firebase-admin/firestore";
+import {
+  DocumentData,
+  QuerySnapshot,
+  Timestamp,
+} from "firebase-admin/firestore";
 
 export async function POST(req: NextRequest) {
   const body = await req.text();
@@ -151,7 +154,6 @@ export async function POST(req: NextRequest) {
   initAdmin();
   const admin = require("firebase-admin");
   const adminDb = admin.firestore();
-
   const collection = adminDb.collection("users");
 
   try {
