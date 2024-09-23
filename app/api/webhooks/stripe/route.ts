@@ -260,11 +260,6 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
 });
 
 // bodyParser'ı devre dışı bırakıyoruz
-export const config = {
-  api: {
-    bodyParser: false, // Body parser'ı kapalı tutuyoruz
-  },
-};
 
 // Ham body'yi almak için yardımcı bir fonksiyon
 async function getRawBody(req: NextRequest): Promise<Buffer> {
