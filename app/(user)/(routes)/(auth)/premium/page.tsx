@@ -10,11 +10,6 @@ const Premium = async () => {
   return (
     <div className="flex items-center h-[600px] gap-4 justify-center">
       {/* Monthly Card */}
-      <div className="flex flex-col">
-        <h4 className="text-white">{process.env.STRIPE_SECRET_KEY}</h4>
-        <h4 className="text-white">{process.env.STRIPE_YEARLY_PRICE_ID}</h4>
-        <h4 className="text-white">{process.env.STRIPE_MONTHLY_PRICE_ID}</h4>
-      </div>
       <a
         target="blank"
         href={monthlyLink || "#"}
