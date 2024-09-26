@@ -260,7 +260,7 @@ import { NextResponse } from "next/server";
 import Stripe from "stripe";
 
 export async function POST(req: Request) {
-  const WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET;
+  const WEBHOOK_SECRET = process.env.NEXT_PUBLIC_STRIPE_WEBHOOK_SECRET;
 
   const stripe = getStripe();
   if (!WEBHOOK_SECRET) {
