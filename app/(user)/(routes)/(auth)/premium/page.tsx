@@ -10,7 +10,7 @@ const Premium = async () => {
   return (
     <div className="flex items-center h-[600px] gap-4 justify-center">
       {/* Monthly Card */}
-
+      <h4 className="text-white">{process.env.STRIPE_WEBHOOK_SECRET}</h4>
       <a
         target="blank"
         href={monthlyLink || "#"}

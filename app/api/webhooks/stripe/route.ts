@@ -130,14 +130,12 @@ import {
   Timestamp,
 } from "firebase-admin/firestore";
 import { getStripe } from "@/libs/stripe";
-import { headers } from "next/headers";
 
 export async function POST(req: NextRequest) {
   const stripe = getStripe();
 
   const body = await req.text();
-  // const sig = req.headers.get("stripe-signature")!;
-  const sig = headers().get("stripe-signature")!;
+  const sig = req.headers.get("stripe-signature")!;
   console.log("Received Stripe signature:", sig);
   let event: Stripe.Event;
   console.log("Request body", body);
