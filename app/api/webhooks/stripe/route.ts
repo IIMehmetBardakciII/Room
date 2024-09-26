@@ -255,13 +255,14 @@
 //   return NextResponse.json({ message: "Webhook received" }, { status: 200 });
 // }
 //* --------------- Last hit
-import { stripe } from "@/libs/stripe";
+import { getStripe } from "@/libs/stripe";
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 
 const WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET;
 
 export async function POST(req: Request) {
+  const stripe = getStripe();
   if (!WEBHOOK_SECRET) {
     return NextResponse.json("Webhook Secret Bulunamadı");
   }
