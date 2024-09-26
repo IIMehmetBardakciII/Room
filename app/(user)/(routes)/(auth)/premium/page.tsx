@@ -12,6 +12,7 @@ const Premium = async () => {
       {/* Monthly Card */}
 
       <a
+        target="blank"
         href={monthlyLink || "#"}
         className="flex flex-col  border border-sidebarNavHover h-[300px] justify-between bg-hoverBlue hover:bg-defaultBlue rounded-[5px] px-8 py-4"
       >

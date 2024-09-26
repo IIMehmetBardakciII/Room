@@ -122,7 +122,6 @@
 // }
 //!---------------------------------------------------
 import Stripe from "stripe";
-// import { stripe } from "@/libs/stripe/config";
 import { NextRequest, NextResponse } from "next/server";
 import { initAdmin } from "@/libs/firebaseAdmin/config";
 import {
@@ -131,12 +130,14 @@ import {
   Timestamp,
 } from "firebase-admin/firestore";
 import { getStripe } from "@/libs/stripe";
+import { headers } from "next/headers";
 
 export async function POST(req: NextRequest) {
   const stripe = getStripe();
 
   const body = await req.text();
-  const sig = req.headers.get("stripe-signature")!;
+  // const sig = req.headers.get("stripe-signature")!;
+  const sig = headers().get("stripe-signature")!;
   console.log("Received Stripe signature:", sig);
   let event: Stripe.Event;
   console.log("Request body", body);
@@ -144,7 +145,7 @@ export async function POST(req: NextRequest) {
     event = stripe.webhooks.constructEvent(
       body,
       sig,
-      process.env.STRIPE_WEBHOOK_KEY!
+      process.env.STRIPE_WEBHOOK_SECRET!
     );
   } catch (error: any) {
     console.log("Webhook signature verification failed.", error.message);
