@@ -1,4 +1,5 @@
-"use server";
+// "use server";
+import "server-only";
 import {
   collection,
   doc,
@@ -13,23 +14,6 @@ import {
 import { db } from "../firebase/config";
 import { VideoType } from "../types/types";
 
-// type Chapter = {
-//   title: string;
-//   fileUrl: string;
-// };
-
-// type Video = {
-//   id: string;
-//   title: string;
-//   description: string;
-//   promoVideoUrl: string;
-//   coverImageUrl: string;
-//   createdAt: Date;
-//   categoryId: string; // categoryId eklenmiştir
-//   videosPart: Chapter[];
-//   videoType: "Free" | "Premium"; // videoType eklenmiştir
-//   rate: number;
-// };
 export async function getAllVideos(): Promise<VideoType[]> {
   const collectionRef = collection(db, "Videos");
   const queryForSort = query(
