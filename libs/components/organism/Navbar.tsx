@@ -9,6 +9,7 @@ const Navbar = async () => {
   // For the sidebar state Context Hook
   const { verifiedToken: token, success } = await getCookies();
   const profilePicture = token?.profilePicture;
+  const userType = token?.userType;
 
   return (
     <header className="w-[calc(100%-32px)] fixed z-50  ">
@@ -62,11 +63,14 @@ const Navbar = async () => {
           <nav className="flex gap-4 max-lg:hidden">
             <NavbarAuthButtons tokenStatus={success} />
             {/* Premiumlu Ol Button */}
-            <Button
-              text="Premiumlu Ol"
-              buttonColor="green"
-              buttonType={success ? "default" : "ghost"}
-            />
+            {userType === "Free" && (
+              <Button
+                text="Premiumlu Ol"
+                buttonColor="green"
+                buttonType={success ? "default" : "ghost"}
+                href="/premium"
+              />
+            )}
           </nav>
           <nav className=" max-lg:block hidden">
             {/* Oturum Aç küçük çözünürlükte */}

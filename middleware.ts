@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyJwtToken } from "./libs/actions/auth";
+import { url } from "inspector";
 
 //*Burdaki işlem kısacası nextUrl url olarak paramter alıyoruz AUTHPAGES dizisinde some ile bizim url imiz ile eşleşen var ise isAuthPages some metodu dolayısıyla true olacak.
 //*Eşleşen var ise Bu da bizim authPages içinde olduğumuzdan dolayı hasVerifiedTokenı aramadan gitmemizi sağlıcak.
@@ -27,7 +28,20 @@ export default async function middleware(request: NextRequest) {
   //* Burda gitmek isteidğimiz url i tutmamız  gerek sebebi infinty loop a girmemek çünkü middleware sign-signup işlemlerindede Geçerli bu sonsuz döngüye koyup app imizi crush ediyor.
   //*Önüne geçmek için gitmek istediğimiz url i tutup
   const isAuthPageRequest = isAuthPages(nextUrl.pathname);
-
+  //*/Premium url isteği öncesi auth kontrolü
+  if (nextUrl.pathname === "/premium") {
+    if (hasVerifiedToken) {
+      // Eğer token doğrulandıysa, premium sayfasına geçişine izin ver
+      return NextResponse.next();
+    } else {
+      // Eğer token yoksa ya da doğrulanmadıysa, sign-in sayfasına yönlendir
+      return NextResponse.redirect(new URL("/sign-in", url));
+    }
+  }
+  // Dashboarda gitmeden admin kontrolü
+  // if(nextUrl.pathname==="/dashboard"){
+  // Admin cookies kontrolü yapılacak
+  // }
   //! Eğer auth işlemleri yapılan bir sayfaya request işlemi get işlemi veya psot farketmez yapılıyorsa isAuthPageRequest True olcak içerisine giricez eğer tokenımız yoksa devam edfebilir
   //! Aksi halde tokenı olup giriş yapmış ya da kayıt olmuş biri tekrar buralara erişemezsin anasayfaya yönlendiriyoruz.
   if (isAuthPageRequest) {
@@ -51,7 +65,7 @@ export default async function middleware(request: NextRequest) {
 //* Middleware ın işleyeceği url pathnameler.
 //* Bu url lerden herhangi birinden get , post gibi request işlemi yapacak olursa araya girip önce middleware içeriğini çalıştırır sonra devam eder.
 export const config = {
-  matcher: ["/sign-in", "/sign-up"],
+  matcher: ["/sign-in", "/sign-up", "/premium", "/dashboard"],
   unstable_allowDynamic: [
     // use a glob to allow anything in the function-bind 3rd party module
     "/node_modules/function-bind/**",
