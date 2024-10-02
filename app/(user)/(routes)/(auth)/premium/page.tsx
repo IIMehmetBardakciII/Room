@@ -6,7 +6,7 @@ const Premium = async () => {
   const monthlyLink =
     process.env.STRIPE_MONTHLY_PLAN_LINK + `?prefilled_email=${token?.email}`;
   const yearlyLink =
-    process.env.STRIPE_YEARLY_PRICE_ID + `?prefilled_email=${token?.email}`;
+    process.env.STRIPE_YEARLY_PLAN_LINK + `?prefilled_email=${token?.email}`;
   return (
     <div className="flex items-center h-[600px] gap-4 justify-center">
       {/* Monthly Card */}
