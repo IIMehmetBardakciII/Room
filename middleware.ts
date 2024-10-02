@@ -65,7 +65,7 @@ export default async function middleware(request: NextRequest) {
 //* Middleware ın işleyeceği url pathnameler.
 //* Bu url lerden herhangi birinden get , post gibi request işlemi yapacak olursa araya girip önce middleware içeriğini çalıştırır sonra devam eder.
 export const config = {
-  matcher: ["/sign-in", "/sign-up", "/premium", "/dashboard"],
+  matcher: ["/sign-in", "/sign-up", "/dashboard"], //"/premium"
   unstable_allowDynamic: [
     // use a glob to allow anything in the function-bind 3rd party module
     "/node_modules/function-bind/**",
