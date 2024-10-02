@@ -1,12 +1,10 @@
-import { getCookies } from "@/libs/actions/Cookies";
+// import { getCookies } from "@/libs/actions/Cookies";
 import { SuccessCheck } from "@/libs/components/svgs";
 
-const Premium = async () => {
-  const { verifiedToken: token } = await getCookies();
-  const monthlyLink =
-    process.env.STRIPE_MONTHLY_PLAN_LINK + `?prefilled_email=${token?.email}`;
-  const yearlyLink =
-    process.env.STRIPE_YEARLY_PLAN_LINK + `?prefilled_email=${token?.email}`;
+const Premium = () => {
+  // const { verifiedToken: token } = await getCookies();
+  const monthlyLink = process.env.STRIPE_MONTHLY_PLAN_LINK;
+  const yearlyLink = process.env.STRIPE_YEARLY_PLAN_LINK;
   return (
     <div className="flex items-center h-[600px] gap-4 justify-center">
       {/* Monthly Card */}

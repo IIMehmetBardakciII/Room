@@ -29,15 +29,15 @@ export default async function middleware(request: NextRequest) {
   //*Önüne geçmek için gitmek istediğimiz url i tutup
   const isAuthPageRequest = isAuthPages(nextUrl.pathname);
   //*/Premium url isteği öncesi auth kontrolü
-  // if (nextUrl.pathname === "/premium") {
-  //   if (hasVerifiedToken) {
-  //     // Eğer token doğrulandıysa, premium sayfasına geçişine izin ver
-  //     return NextResponse.next();
-  //   } else {
-  //     // Eğer token yoksa ya da doğrulanmadıysa, sign-in sayfasına yönlendir
-  //     return NextResponse.redirect(new URL("/sign-in", url));
-  //   }
-  // }
+  if (nextUrl.pathname === "/premium") {
+    if (hasVerifiedToken) {
+      // Eğer token doğrulandıysa, premium sayfasına geçişine izin ver
+      return NextResponse.next();
+    } else {
+      // Eğer token yoksa ya da doğrulanmadıysa, sign-in sayfasına yönlendir
+      return NextResponse.redirect(new URL("/sign-in", url));
+    }
+  }
   // Dashboarda gitmeden admin kontrolü
   // if(nextUrl.pathname==="/dashboard"){
   // Admin cookies kontrolü yapılacak
@@ -65,7 +65,7 @@ export default async function middleware(request: NextRequest) {
 //* Middleware ın işleyeceği url pathnameler.
 //* Bu url lerden herhangi birinden get , post gibi request işlemi yapacak olursa araya girip önce middleware içeriğini çalıştırır sonra devam eder.
 export const config = {
-  matcher: ["/sign-in", "/sign-up", "/dashboard"], //"/premium"
+  matcher: ["/sign-in", "/sign-up", "/premium", "/dashboard"],
   unstable_allowDynamic: [
     // use a glob to allow anything in the function-bind 3rd party module
     "/node_modules/function-bind/**",
